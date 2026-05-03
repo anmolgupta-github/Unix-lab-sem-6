@@ -5,7 +5,7 @@ int main(int argc, char *argv[])
 {
 	if(argc < 2)
 	{
-		printf("Usage %s source destination");
+		printf("Usage %s source destination", argv[0]);
 		return 1;
 	}
 
