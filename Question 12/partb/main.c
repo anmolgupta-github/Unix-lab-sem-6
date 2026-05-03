@@ -1,18 +1,35 @@
 #include<stdio.h>
+#include<stdlib.h>
 #include<unistd.h>
+#include<sys/wait.h>
+
+extern char **environ;
 
 int main()
 {
-	int pid;
+    int pid = fork();
 
-	pid = fork();
-	if(pid  == 0)
-	{
-		execl("./echoall", "echoall", "myarg1","MYARG1",NULL);
-	}
-	else{
-		sleep(1);
-		 execl("./echoall","echoall","only 1 arg", NULL);
-	}
-	return 0;
+    if(pid == 0)
+    {
+        printf("Child process executing...\n");
+
+        char *env[] = {
+            "USER=ANMOL",
+            "PATH=/custom/bin",
+            "HOME=/home/custom",
+            NULL
+        };
+
+        execle("./echoall", "echoall", NULL, env);
+    }
+    else
+    {
+        printf("Parent process executing...\n");
+
+        wait(NULL);
+
+        execle("./echoall", "echoall", NULL, environ);
+    }
+
+    return 0;
 }

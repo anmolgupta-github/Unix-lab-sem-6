@@ -1,12 +1,16 @@
 #include<stdio.h>
 
-int main(int argc, char *argv[])
-{
-	int i;
+extern char **environ;
 
-	for(i = 0;i<argc;i++)
-	{
-		printf("argv[%d]:%s\n", i , argv[i]);
-	}
-	return 0;
+int main()
+{
+    int i = 0;
+
+    while(environ[i] != NULL)
+    {
+        printf("%s\n", environ[i]);
+        i++;
+    }
+
+    return 0;
 }
