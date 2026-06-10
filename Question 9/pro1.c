@@ -1,23 +1,39 @@
-#include<stdio.h>
-#include<unistd.h>
-#include<sys/stat.h>
-#include<fcntl.h>
-
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include<errno.h>
 int main()
 {
-	mode_t oldmask;
+    mode_t mask, perm;
+    char filename[50];
 
-	oldmask = umask(002);
-	printf("Oldmask:%03o, New mask : 022\n", oldmask);
+    printf("Enter filename: ");
+    scanf("%s", filename);
 
-	int fd = creat("t1.txt",0777);
+    printf("Enter umask (octal): ");
+    scanf("%o", &mask);
 
-	if(fd < 0)
-	{
-		printf("Error creating file\n");
-	       	return 1;
-	}
-	chmod("t1.txt",0644);
-	printf("Changing permission of t1.txt to 0644\n");
-	 return 0;
+    mode_t oldmask = umask(mask);
+
+    printf("Old umask = %03o\n", oldmask);
+
+    int fd = creat(filename, 0777);
+
+    if(fd < 0)
+    {
+        printf("Error creating file\n");
+        return 1;
+    }
+
+    close(fd);
+
+    printf("Enter new permission (octal): ");
+    scanf("%o", &perm);
+
+    chmod(filename, perm);
+
+    printf("Permissions changed to %03o\n", perm);
+
+    return 0;
 }
